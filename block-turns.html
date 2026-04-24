@@ -298,12 +298,29 @@
             if (videoId && videoId !== 'YOUTUBE_VIDEO_ID') {
                 videoContainer.innerHTML = `
                     <iframe 
-                        src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" 
+                        id="videoFrame"
+                        src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
                         frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                         allowfullscreen>
                     </iframe>
                 `;
+                
+                // Try to trigger native fullscreen on mobile
+                setTimeout(() => {
+                    const iframe = document.getElementById('videoFrame');
+                    if (iframe && window.innerWidth <= 768) {
+                        if (iframe.requestFullscreen) {
+                            iframe.requestFullscreen();
+                        } else if (iframe.webkitRequestFullscreen) {
+                            iframe.webkitRequestFullscreen();
+                        } else if (iframe.mozRequestFullScreen) {
+                            iframe.mozRequestFullScreen();
+                        } else if (iframe.msRequestFullscreen) {
+                            iframe.msRequestFullscreen();
+                        }
+                    }
+                }, 100);
             } else {
                 videoContainer.innerHTML = `
                     <div style="padding: 60px 20px; text-align: center; color: #666;">
