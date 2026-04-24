@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salsa 3.0 Compendium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --flame: #E63946;
+            --sunset: #F77F00;
+            --gold: #FCBF49;
+            --cream: #FFF8F0;
+            --night: #1D3557;
+            --deep: #0A1128;
+        }
+
+        body {
+            font-family: 'Archivo', sans-serif;
+            background: linear-gradient(135deg, var(--deep) 0%, var(--night) 100%);
+            color: var(--cream);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(230, 57, 70, 0.03) 35px, rgba(230, 57, 70, 0.03) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(247, 127, 0, 0.03) 35px, rgba(247, 127, 0, 0.03) 70px);
+            animation: patternSlide 20s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes patternSlide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(70px, 70px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            letter-spacing: 0.05em;
+            background: linear-gradient(135deg, var(--flame) 0%, var(--sunset) 50%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            color: var(--gold);
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            animation: fadeIn 0.8s ease-out 0.4s backwards;
+        }
+
+        .toggle-btn {
+            padding: 12px 24px;
+            background: rgba(230, 57, 70, 0.2);
+            border: 2px solid var(--flame);
+            color: var(--cream);
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 8px;
+        }
+
+        .toggle-btn:hover {
+            background: var(--flame);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.4);
+        }
+
+        .toggle-btn.active {
+            background: var(--flame);
+            box-shadow: 0 5px 20px rgba(230, 57, 70, 0.5);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Card View */
+        .moves-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .move-category {
+            background: linear-gradient(135deg, rgba(29, 53, 87, 0.6) 0%, rgba(10, 17, 40, 0.6) 100%);
+            border: 2px solid rgba(230, 57, 70, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.6s ease-out backwards;
+        }
+
+        .move-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(247, 127, 0, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .move-category:hover::before {
+            left: 100%;
+        }
+
+        .move-category:hover {
+            border-color: var(--sunset);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(247, 127, 0, 0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .move-category:nth-child(1) { animation-delay: 0.1s; }
+        .move-category:nth-child(2) { animation-delay: 0.2s; }
+        .move-category:nth-child(3) { animation-delay: 0.3s; }
+        .move-category:nth-child(4) { animation-delay: 0.4s; }
+        .move-category:nth-child(5) { animation-delay: 0.5s; }
+        .move-category:nth-child(6) { animation-delay: 0.6s; }
+
+        .move-category h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+            letter-spacing: 0.05em;
+        }
+
+        .week {
+            margin-bottom: 15px;
+        }
+
+        .week-title {
+            font-weight: 700;
+            color: var(--sunset);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .move-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .move-item {
+            padding: 10px;
+            background: rgba(230, 57, 70, 0.1);
+            border-left: 3px solid var(--flame);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .move-item:hover {
+            background: rgba(247, 127, 0, 0.2);
+            border-left-color: var(--sunset);
+            padding-left: 15px;
+        }
+
+        /* Table View */
+        .table-view {
+            display: none;
+        }
+
+        .table-view.active {
+            display: block;
+        }
+
+        .card-view.active {
+            display: grid;
+        }
+
+        .card-view {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-bottom: 40px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--flame) 0%, var(--sunset) 100%);
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 0.05em;
+            color: var(--cream);
+        }
+
+        th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        tbody tr {
+            background: rgba(29, 53, 87, 0.6);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        tbody tr:hover {
+            background: rgba(247, 127, 0, 0.3);
+            transform: translateX(5px);
+        }
+
+        td {
+            padding: 15px;
+            border-top: 2px solid rgba(230, 57, 70, 0.2);
+            border-bottom: 2px solid rgba(230, 57, 70, 0.2);
+        }
+
+        td:first-child {
+            border-left: 2px solid rgba(230, 57, 70, 0.2);
+            border-radius: 8px 0 0 8px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        td:last-child {
+            border-right: 2px solid rgba(230, 57, 70, 0.2);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Modal for video */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 17, 40, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--night) 0%, var(--deep) 100%);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 90%;
+            max-height: 90%;
+            width: 800px;
+            border: 2px solid var(--flame);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--gold);
+            letter-spacing: 0.05em;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--cream);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-btn:hover {
+            background: rgba(230, 57, 70, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #000;
+        }
+
+        .video-container iframe,
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-placeholder {
+            padding: 60px 20px;
+            text-align: center;
+            background: rgba(230, 57, 70, 0.1);
+            border-radius: 12px;
+            border: 2px dashed var(--flame);
+        }
+
+        .video-placeholder p {
+            color: var(--sunset);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .video-placeholder small {
+            color: var(--cream);
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .moves-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            .modal-content {
+                padding: 20px;
+                width: 95%;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Touch optimization for mobile */
+        @media (hover: none) {
+            .move-item:active,
+            .move-category:active,
+            tbody tr:active {
+                transform: scale(0.98);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SALSA 3.0</h1>
+            <div class="subtitle">Dance Compendium</div>
+        </header>
+
+        <div class="view-toggle">
+            <button class="toggle-btn active" onclick="switchView('card')">Card View</button>
+            <button class="toggle-btn" onclick="switchView('table')">Table View</button>
+        </div>
+
+        <!-- 
+        ============================================================
+        INSTRUCTIONS: 
+        1. Replace "Category Name" with your actual category names
+        2. Replace "Move Name" with your actual move names  
+        3. Replace 'YOUTUBE_VIDEO_ID' with your actual YouTube video IDs
+        4. Add or remove weeks as needed
+        5. Copy/paste category blocks to add more categories
+        ============================================================
+        -->
+
+        <!-- Card View -->
+        <div class="card-view active moves-grid">
+            
+            <!-- CATEGORY 1 -->
+            <div class="move-category">
+                <h3>Block Turns</h3>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Block Turns - Week 1', 'YOUTUBE_VIDEO_ID')">
+                        <strong>Week 1</strong><br>
+                        Right Block Double<br>
+                        Left Block Double<br>
+                        Shoulder Block Hook
+                    </div>
+                </div>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Block Turns - Week 2', 'YOUTUBE_VIDEO_ID')">
+                        <strong>Week 2</strong>
+                    </div>
+                </div>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Block Turns - Week 3', 'YOUTUBE_VIDEO_ID')">
+                        <strong>Week 3</strong>
+                    </div>
+                </div>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Block Turns - Week 4', 'YOUTUBE_VIDEO_ID')">
+                        <strong>Week 4</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATEGORY 2 -->
+            <div class="move-category">
+                <h3>Category Name 2</h3>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Category 2 - Week 1', 'YOUTUBE_VIDEO_ID')">Week 1</div>
+                </div>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Category 2 - Week 2', 'YOUTUBE_VIDEO_ID')">Week 2</div>
+                </div>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Category 2 - Week 3', 'YOUTUBE_VIDEO_ID')">Week 3</div>
+                </div>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Category 2 - Week 4', 'YOUTUBE_VIDEO_ID')">Week 4</div>
+                </div>
+            </div>
+
+            <!-- CATEGORY 3 -->
+            <div class="move-category">
+                <h3>Category Name 3</h3>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Category 3 - Week 1', 'YOUTUBE_VIDEO_ID')">Week 1</div>
+                </div>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Category 3 - Week 2', 'YOUTUBE_VIDEO_ID')">Week 2</div>
+                </div>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Category 3 - Week 3', 'YOUTUBE_VIDEO_ID')">Week 3</div>
+                </div>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Category 3 - Week 4', 'YOUTUBE_VIDEO_ID')">Week 4</div>
+                </div>
+            </div>
+
+            <!-- CATEGORY 4 -->
+            <div class="move-category">
+                <h3>Category Name 4</h3>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Category 4 - Week 1', 'YOUTUBE_VIDEO_ID')">Week 1</div>
+                </div>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Category 4 - Week 2', 'YOUTUBE_VIDEO_ID')">Week 2</div>
+                </div>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Category 4 - Week 3', 'YOUTUBE_VIDEO_ID')">Week 3</div>
+                </div>
+                <div class="week">
+                    <div class="move-item" onclick="openVideo('Category 4 - Week 4', 'YOUTUBE_VIDEO_ID')">Week 4</div>
+                </div>
+            </div>
+
+            <!-- Add more categories by copying a category block above -->
+
+        </div>
+
+        <!-- Table View -->
+        <div class="table-view">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Week</th>
+                        <th>Moves</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="openVideo('Block Turns - Week 1', 'YOUTUBE_VIDEO_ID')">
+                        <td>Block Turns</td>
+                        <td>Week 1</td>
+                        <td>Right Block Double, Left Block Double, Shoulder Block Hook</td>
+                    </tr>
+                    <tr onclick="openVideo('Block Turns - Week 2', 'YOUTUBE_VIDEO_ID')">
+                        <td>Block Turns</td>
+                        <td>Week 2</td>
+                        <td>-</td>
+                    </tr>
+                    <tr onclick="openVideo('Block Turns - Week 3', 'YOUTUBE_VIDEO_ID')">
+                        <td>Block Turns</td>
+                        <td>Week 3</td>
+                        <td>-</td>
+                    </tr>
+                    <tr onclick="openVideo('Block Turns - Week 4', 'YOUTUBE_VIDEO_ID')">
+                        <td>Block Turns</td>
+                        <td>Week 4</td>
+                        <td>-</td>
+                    </tr>
+                    <!-- Add more rows for other categories -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Move Name</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="video-container" id="videoContainer">
+                <div class="video-placeholder">
+                    <p>📹 Video will appear here</p>
+                    <small>Replace YOUTUBE_VIDEO_ID with your actual video IDs</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchView(view) {
+            const cardView = document.querySelector('.card-view');
+            const tableView = document.querySelector('.table-view');
+            const buttons = document.querySelectorAll('.toggle-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            if (view === 'card') {
+                cardView.classList.add('active');
+                tableView.classList.remove('active');
+                buttons[0].classList.add('active');
+            } else {
+                tableView.classList.add('active');
+                cardView.classList.remove('active');
+                buttons[1].classList.add('active');
+            }
+        }
+
+        function openVideo(moveName, videoId) {
+            const modal = document.getElementById('videoModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const videoContainer = document.getElementById('videoContainer');
+
+            modalTitle.textContent = moveName;
+
+            // Replace with actual YouTube embed
+            if (videoId && videoId !== 'YOUTUBE_VIDEO_ID') {
+                videoContainer.innerHTML = `
+                    <iframe 
+                        src="https://www.youtube.com/embed/${videoId}" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                `;
+            } else {
+                videoContainer.innerHTML = `
+                    <div class="video-placeholder">
+                        <p>📹 Video will appear here</p>
+                        <small>Replace YOUTUBE_VIDEO_ID with your actual video IDs</small>
+                    </div>
+                `;
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('videoModal');
+            const videoContainer = document.getElementById('videoContainer');
+            
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Clear video to stop playback
+            setTimeout(() => {
+                videoContainer.innerHTML = `
+                    <div class="video-placeholder">
+                        <p>📹 Video will appear here</p>
+                        <small>Replace YOUTUBE_VIDEO_ID with your actual video IDs</small>
+                    </div>
+                `;
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
