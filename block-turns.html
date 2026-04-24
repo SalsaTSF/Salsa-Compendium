@@ -166,6 +166,21 @@
             width: 100%;
         }
 
+        .mobile-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 100;
+        }
+
         @media (max-width: 768px) {
             .category-title {
                 font-size: 2rem;
@@ -177,6 +192,7 @@
 
             .modal {
                 padding: 0;
+                background: #000;
             }
 
             .modal-content {
@@ -185,22 +201,33 @@
                 height: 100%;
                 max-height: 100vh;
                 border-radius: 0;
+                background: #000;
             }
 
             .modal-header {
-                padding: 15px 20px;
-            }
-
-            .modal-title {
-                font-size: 1.2rem;
-            }
-
-            .video-container {
-                padding-bottom: 75vh;
+                display: none;
             }
 
             .modal-footer {
-                padding: 15px 20px;
+                display: none;
+            }
+
+            .video-container {
+                padding-bottom: 0;
+                height: 100vh;
+                position: relative;
+            }
+
+            .video-container iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            .mobile-close-btn {
+                display: block !important;
             }
         }
     </style>
@@ -255,6 +282,8 @@
             <div class="modal-footer">
                 <button class="close-button" onclick="closeModal()">Close</button>
             </div>
+            <!-- Mobile close button overlay -->
+            <button class="mobile-close-btn" onclick="closeModal()" style="display: none;">&times;</button>
         </div>
     </div>
 
