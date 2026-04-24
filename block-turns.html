@@ -22,6 +22,27 @@
             text-align: center;
             padding: 40px 20px 20px;
             background: #000;
+            position: relative;
+        }
+
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #D4AF37;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .home-btn:active {
+            background: #C4A027;
         }
 
         .level {
@@ -234,6 +255,7 @@
 </head>
 <body>
     <div class="header">
+        <a href="index.html" class="home-btn">← Home</a>
         <div class="level">Salsa 3.0</div>
         <div class="category-title">Block Turns</div>
     </div>
@@ -242,31 +264,30 @@
         <!-- Week 1 -->
         <div class="week-section">
             <h2 class="week-title">Week 1</h2>
-            <button class="move-button" onclick="openVideo('Right Block Double', 'YOUTUBE_VIDEO_ID')">Right Block Double</button>
-            <button class="move-button" onclick="openVideo('Left Block Double', 'YOUTUBE_VIDEO_ID')">Left Block Double</button>
-            <button class="move-button" onclick="openVideo('Shoulder Block Hook', 'YOUTUBE_VIDEO_ID')">Shoulder Block Hook</button>
-            <button class="move-button" onclick="openVideo('Full Week 1', '9t6al3hW0JY')">Full Week 1</button>
+            <button class="move-button" onclick="openVideo('Right Block Double', '1DmtRIteTFmpP13eMawQbnTExIxexTu0J')">Right Block Double</button>
+            <button class="move-button" onclick="openVideo('Left Block Double & Shoulder Block Hook', '1KIw4BLt0cHreMK1d3eEbKkPQs9X7JTlr')">Left Block Double & Shoulder Block Hook</button>
+            <button class="move-button" onclick="openVideo('Full Week 1', '1JLVv5Dg9CVz8kJ9tUkERHoXsSdB3UCv5')">Full Week 1</button>
         </div>
 
         <!-- Week 2 -->
         <div class="week-section">
             <h2 class="week-title">Week 2</h2>
-            <button class="move-button" onclick="openVideo('Move Name', 'YOUTUBE_VIDEO_ID')">Move Name</button>
-            <button class="move-button" onclick="openVideo('Move Name', 'YOUTUBE_VIDEO_ID')">Move Name</button>
+            <button class="move-button" onclick="openVideo('Move Name', 'GOOGLE_DRIVE_FILE_ID')">Move Name</button>
+            <button class="move-button" onclick="openVideo('Move Name', 'GOOGLE_DRIVE_FILE_ID')">Move Name</button>
         </div>
 
         <!-- Week 3 -->
         <div class="week-section">
             <h2 class="week-title">Week 3</h2>
-            <button class="move-button" onclick="openVideo('Move Name', 'YOUTUBE_VIDEO_ID')">Move Name</button>
-            <button class="move-button" onclick="openVideo('Move Name', 'YOUTUBE_VIDEO_ID')">Move Name</button>
+            <button class="move-button" onclick="openVideo('Move Name', 'GOOGLE_DRIVE_FILE_ID')">Move Name</button>
+            <button class="move-button" onclick="openVideo('Move Name', 'GOOGLE_DRIVE_FILE_ID')">Move Name</button>
         </div>
 
         <!-- Week 4 -->
         <div class="week-section">
             <h2 class="week-title">Week 4</h2>
-            <button class="move-button" onclick="openVideo('Move Name', 'YOUTUBE_VIDEO_ID')">Move Name</button>
-            <button class="move-button" onclick="openVideo('Full Month Demo', 'YOUTUBE_VIDEO_ID')">Full Month Demo</button>
+            <button class="move-button" onclick="openVideo('Move Name', 'GOOGLE_DRIVE_FILE_ID')">Move Name</button>
+            <button class="move-button" onclick="openVideo('Full Month Demo', 'GOOGLE_DRIVE_FILE_ID')">Full Month Demo</button>
         </div>
     </div>
 
@@ -295,13 +316,13 @@
 
             modalTitle.textContent = moveName;
 
-            if (videoId && videoId !== 'YOUTUBE_VIDEO_ID') {
+            if (videoId && videoId !== 'GOOGLE_DRIVE_FILE_ID') {
                 videoContainer.innerHTML = `
                     <iframe 
                         id="videoFrame"
-                        src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
+                        src="https://drive.google.com/file/d/${videoId}/preview" 
                         frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allow="autoplay"
                         allowfullscreen>
                     </iframe>
                 `;
@@ -325,7 +346,7 @@
                 videoContainer.innerHTML = `
                     <div style="padding: 60px 20px; text-align: center; color: #666;">
                         <p>Video not yet added</p>
-                        <small>Replace YOUTUBE_VIDEO_ID with actual video ID</small>
+                        <small>Replace GOOGLE_DRIVE_FILE_ID with your actual file ID from Google Drive</small>
                     </div>
                 `;
             }
