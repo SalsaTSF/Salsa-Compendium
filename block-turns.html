@@ -202,6 +202,22 @@
             z-index: 100;
         }
 
+        .mobile-fullscreen-btn {
+            position: absolute;
+            bottom: 70px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+            background: rgba(212, 175, 55, 0.9);
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 100;
+            font-weight: bold;
+        }
+
         @media (max-width: 768px) {
             .category-title {
                 font-size: 2rem;
@@ -305,6 +321,8 @@
             </div>
             <!-- Mobile close button overlay -->
             <button class="mobile-close-btn" onclick="closeModal()" style="display: none;">&times;</button>
+            <!-- Mobile fullscreen button -->
+            <button class="mobile-fullscreen-btn" onclick="goFullscreen()" style="display: none;">⛶</button>
         </div>
     </div>
 
@@ -327,21 +345,22 @@
                     </iframe>
                 `;
                 
-                // Try to trigger native fullscreen on mobile
-                setTimeout(() => {
-                    const iframe = document.getElementById('videoFrame');
-                    if (iframe && window.innerWidth <= 768) {
-                        if (iframe.requestFullscreen) {
-                            iframe.requestFullscreen();
-                        } else if (iframe.webkitRequestFullscreen) {
-                            iframe.webkitRequestFullscreen();
-                        } else if (iframe.mozRequestFullScreen) {
-                            iframe.mozRequestFullScreen();
-                        } else if (iframe.msRequestFullscreen) {
-                            iframe.msRequestFullscreen();
-                        }
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                // Trigger native fullscreen immediately on mobile
+                const iframe = document.getElementById('videoFrame');
+                if (iframe && window.innerWidth <= 768) {
+                    if (iframe.requestFullscreen) {
+                        iframe.requestFullscreen().catch(err => console.log('Fullscreen failed:', err));
+                    } else if (iframe.webkitRequestFullscreen) {
+                        iframe.webkitRequestFullscreen();
+                    } else if (iframe.mozRequestFullScreen) {
+                        iframe.mozRequestFullScreen();
+                    } else if (iframe.msRequestFullscreen) {
+                        iframe.msRequestFullscreen();
                     }
-                }, 100);
+                }
             } else {
                 videoContainer.innerHTML = `
                     <div style="padding: 60px 20px; text-align: center; color: #666;">
@@ -349,10 +368,9 @@
                         <small>Replace GOOGLE_DRIVE_FILE_ID with your actual file ID from Google Drive</small>
                     </div>
                 `;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
             }
-
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
